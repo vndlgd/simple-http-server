@@ -10,9 +10,30 @@
 #define BACKLOG 10
 
 void* handle_client(void* args) {
+    // cast client_fd to int* from void* and then dereference
+    int client_fd = *((int*) args);
     // Learn about HTTP 
     // https://www.tutorialspoint.com/http/http_overview.htm
-    printf("I handle communication between server and client!\n");
+
+    // Define the HTTP response
+    const char* http_response = 
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: text/html\r\n"
+        "Content-Length: 13\r\n" // calculate content-length dynamically
+        "\r\n"
+        "<h1>Hello!</h1>";
+
+    // calculate the length of the response 
+    size_t response_length = strlen(http_response);
+    
+    // send the response
+    if (send(client_fd, http_response, response_length, 0) < 0) 
+    {
+        perror("send failed");
+        exit(EXIT_FAILURE);
+    }
+
+    close(client_fd);
     return NULL;
 }
 
@@ -42,13 +63,6 @@ int main(int argc, char* argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    // bind it to the port we passed in the getaddrinfo()
-    if (bind(server_fd, res->ai_addr, res->ai_addrlen) < 0) 
-    {
-        perror("bind");
-        exit(EXIT_FAILURE);
-    }
-
     int optval=1;
     // https://pubs.opengroup.org/onlinepubs/007904975/functions/setsockopt.html
     // lose the pesky "Address already in use" error message
@@ -57,7 +71,14 @@ int main(int argc, char* argv[]) {
         close(server_fd);
         exit(EXIT_FAILURE);
     } 
-    
+
+    // bind it to the port we passed in the getaddrinfo()
+    if (bind(server_fd, res->ai_addr, res->ai_addrlen) < 0) 
+    {
+        perror("bind");
+        exit(EXIT_FAILURE);
+    }
+
     // listen for connections
     if (listen(server_fd, BACKLOG) < 0) 
     {
@@ -82,7 +103,8 @@ int main(int argc, char* argv[]) {
 
         // create a new thread to handle client request
         pthread_t thread_id; 
-        if (pthread_create(&thread_id, NULL, &handle_client, NULL) != 0)
+        // pass the function handle_client and client_fd as an argument to it
+        if (pthread_create(&thread_id, NULL, &handle_client, &client_fd) != 0)
         {
             perror("thread creation failed");
             exit(EXIT_FAILURE);
