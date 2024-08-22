@@ -23,8 +23,6 @@ This project is a simple HTTP server implemented in C, created to deepen my unde
 
 My main challenges were:
 
-- **Handling HTTP Requests:** I initially struggled with processing and responding to different types of HTTP requests. I learned that simply sending a file (like index.html) required more detailed handling to ensure proper display in a web browser. 
-
 - **Serving Different File Types:** It was challenging to realize that serving only index.html would not automatically handle other file types. Handling different types of files, such as images, required additional implementation. 
 
 - **Constructing HTTP Responses:** Crafting the correct HTTP response with appropriate headers and content was a significant challenge due to my lack of experience with file handling in C. Ensuring the responses were correctly formatted for browser recognition was a learning experience. 
