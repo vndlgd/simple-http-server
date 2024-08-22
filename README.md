@@ -19,12 +19,6 @@ This project is a simple HTTP server implemented in C. It serves as an education
 - **Handling Requests:** Accepts client connections and creates threads to handle each request.
 - **Serving Files:** Responds with the contents of `index.html`.
 
-## Steps Remaining
-
-- **Handle Requests and Send Responses:**
-  - Use `recv()` to read the client’s request (e.g., for `index.html`).
-  - Use `send()` to construct and send the appropriate HTTP response, including headers and the contents of `index.html`.
-
 ## Usage
 
 1. **Clone the Repository:**
