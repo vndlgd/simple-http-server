@@ -2,13 +2,13 @@
 
 ## Overview
 
-This project is a simple HTTP server implemented in C. It serves as an educational tool to understand the basics of how HTTP servers work, including how to handle HTTP requests and serve HTML files. The server demonstrates fundamental concepts such as socket programming, multi-threading, and HTTP protocol handling.
+This project is a simple HTTP server implemented in C, created to deepen my understanding of C programming and HTTP servers. It covers key concepts like socket programming, multi-threading, and basic HTTP protocol handling. This server serves as a learning tool to demonstrate these concepts in action.
 ![Cat 200 OK Image](ok.jpg)
 
 ## Goal
 
-- **Input:** Run `server.c`.
-- **System:** Source code of `server.c`.
+- **Input:** `server.c`.
+- **Build and Run:** Compile `server.c` to create the executable.
 - **Output:** Serve the `index.html` file on `localhost:8080`, displaying an HTML page with an image of a cat.
 
 ## Features
@@ -17,33 +17,23 @@ This project is a simple HTTP server implemented in C. It serves as an education
 - **Binding:** Binds the socket to an IP address and port.
 - **Listening:** Listens for incoming connections.
 - **Handling Requests:** Accepts client connections and creates threads to handle each request.
-- **Serving Files:** Responds with the contents of `index.html`.
-
-## Usage
-
-1. **Clone the Repository:**
-   ```sh
-   git clone <repository-url>
-   ```
-2. **Build the Project:**
-   ```sh
-   cd <repository-directory>
-   make
-   ```
-3. **Run the Server:**
-   ```sh
-   ./server
-   ```
-4. **Access the Server:**
-   Open a web browser and navigate to `http://localhost:8080` to view the `index.html` file.
+- **Serving Files:** Responds with the contents of `index.html` and JPEG images.
 
 ## Development Notes
 
-This project involved implementing a simple HTTP server in C. During development, I encountered several challenges, including handling different file types and implementing full HTTP request handling. I used ChatGPT as a resource for guidance on specific technical issues and to understand complex concepts.
+My main challenges were:
 
-### Limitations
-- **File Handling:** Currently only supports `index.html` and JPEG images. Other file types or more complex scenarios are not handled.
-- **Response Handling:** Limited to basic error handling and does not cover all HTTP features.
+- **Handling HTTP Requests:** I initially struggled with processing and responding to different types of HTTP requests. I learned that simply sending a file (like index.html) required more detailed handling to ensure proper display in a web browser. 
 
-This project served as a valuable learning experience in network programming and C. Future improvements could include broader file type support and more robust error handling.
+- **Serving Different File Types:** It was challenging to realize that serving only index.html would not automatically handle other file types. Handling different types of files, such as images, required additional implementation. 
 
+- **Constructing HTTP Responses:** Crafting the correct HTTP response with appropriate headers and content was a significant challenge due to my lack of experience with file handling in C. Ensuring the responses were correctly formatted for browser recognition was a learning experience. 
+
+To overcome these challenges, I utilized several resources:
+- **ChatGPT:** For guidance on specific technical issues and understanding complex concepts.
+- **Beej's Guide to Network Programming:** For foundational knowledge on socket programming and network communication.
+- **Tutorials and Guides:** Including [YouTube videos](https://www.youtube.com/watch?v=mStnzIEprH8) and [TutorialsPoint’s HTTP guide](https://www.tutorialspoint.com/http/index.htm) for understanding HTTP protocol basics.
+
+## Final Thoughts
+
+This project was a valuable learning experience in network programming and C. It helped me become more familiar with Makefiles and reinforced my understanding of socket programming. While I used various resources to complete the project, I recognize that there is still much to learn. I plan to continue improving my skills in C.
