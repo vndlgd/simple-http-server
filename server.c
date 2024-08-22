@@ -8,32 +8,72 @@
 
 #define PORT "8080" // the port users connect to
 #define BACKLOG 10
+#define BUFFER_SIZE 1048576 
+
+void build_http_response(const char *file_name, const char *file_ext, char *response, size_t *response_len) {
+    // TODO: server sends http response
+}
+
 
 void* handle_client(void* args) {
-    // cast client_fd to int* from void* and then dereference
-    int client_fd = *((int*) args);
-    // Learn about HTTP 
-    // https://www.tutorialspoint.com/http/http_overview.htm
+    int client_fd = *((int*)args);
+    char* buffer = (char *)malloc(BUFFER_SIZE);
 
-    // Define the HTTP response
-    const char* http_response = 
-        "HTTP/1.1 200 OK\r\n"
-        "Content-Type: text/html\r\n"
-        "Content-Length: 13\r\n" // calculate content-length dynamically
-        "\r\n"
-        "<h1>Hello!</h1>";
-
-    // calculate the length of the response 
-    size_t response_length = strlen(http_response);
-    
-    // send the response
-    if (send(client_fd, http_response, response_length, 0) < 0) 
+    // client request we receive in the http server 
+    ssize_t bytes_received = recv(client_fd, buffer, BUFFER_SIZE, 0);
+    if (bytes_received <= 0)
     {
-        perror("send failed");
-        exit(EXIT_FAILURE);
+        perror("recv: ");
+        close(client_fd);
+        free(buffer);
+        return NULL;
+    }
+    
+     // Print the received request for debugging purposes
+    // printf("Received request:\n%s\n", buffer);
+
+    // Check if request is GET and parse the URL
+    if (strstr(buffer, "GET /") == buffer) {
+        char* file_name = "index.html"; // Default file
+        char* file_ext = "html"; // Default extension
+
+        char* url_start = buffer + 4;
+        char* url_end = strstr(url_start, " ");
+        if (url_end)
+        {
+            *url_end = '\0'; // null terminate
+            if (strcmp(url_start, "/") == 0) 
+            {
+                file_name = "index.html"; // default file
+            } else {
+                file_name = url_start + 1; // remove the leading slash
+                file_ext = strrchr(file_name, '.');
+                if (file_ext) {
+                    file_ext++; // skip the dot
+                } else {
+                    file_ext = "html"; // Default extension if none
+                }
+            }
+        }
+        
+        // Build and send the HTTP response to the client
+        char* response = (char*)malloc(BUFFER_SIZE * 2);
+        size_t response_len;
+        build_http_response(file_name, file_ext, response, &response_len);
+        ssize_t bytes_sent = send(client_fd, response, response_len, 0);
+
+        if (bytes_sent <= 0) {
+            perror("send failed");
+            close(client_fd);
+            free(response);
+            free(buffer);
+            return NULL;
+        }
+        free(response);
     }
 
     close(client_fd);
+    free(buffer);
     return NULL;
 }
 
@@ -76,6 +116,7 @@ int main(int argc, char* argv[]) {
     if (bind(server_fd, res->ai_addr, res->ai_addrlen) < 0) 
     {
         perror("bind");
+        close(server_fd);
         exit(EXIT_FAILURE);
     }
 
@@ -83,6 +124,7 @@ int main(int argc, char* argv[]) {
     if (listen(server_fd, BACKLOG) < 0) 
     {
         perror("listen");
+        close(server_fd);
         exit(EXIT_FAILURE);
     }
 
