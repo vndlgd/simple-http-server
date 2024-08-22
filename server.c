@@ -11,7 +11,34 @@
 #define BUFFER_SIZE 1048576 
 
 void build_http_response(const char *file_name, const char *file_ext, char *response, size_t *response_len) {
-    // TODO: server sends http response
+    FILE *file = fopen(file_name, "rb");
+    if (!file) {
+        // Handle file not found
+        strcpy(response, "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\n\r\n");
+        *response_len = strlen(response);
+        return;
+    }
+
+    // Get file size
+    fseek(file, 0, SEEK_END);
+    long file_size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    // Build response headers
+    snprintf(response, BUFFER_SIZE,
+        "HTTP/1.1 200 OK\r\n"
+        "Content-Type: %s\r\n"
+        "Content-Length: %ld\r\n"
+        "\r\n",
+        strcmp(file_ext, "jpg") == 0 ? "image/jpeg" : "text/html",
+        file_size);
+    *response_len = strlen(response);
+
+    // Append file content
+    fread(response + *response_len, 1, file_size, file);
+    *response_len += file_size;
+
+    fclose(file);
 }
 
 
@@ -29,7 +56,7 @@ void* handle_client(void* args) {
         return NULL;
     }
     
-     // Print the received request for debugging purposes
+    // Print the received request for debugging purposes
     // printf("Received request:\n%s\n", buffer);
 
     // Check if request is GET and parse the URL
