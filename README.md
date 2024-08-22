@@ -39,4 +39,11 @@ This project is a simple HTTP server implemented in C. It serves as an education
 
 ## Development Notes
 
-- Current Focus: Understanding HTTP protocol details and completing the handling of HTTP requests and responses.
+This project involved implementing a simple HTTP server in C. During development, I encountered several challenges, including handling different file types and implementing full HTTP request handling. I used ChatGPT as a resource for guidance on specific technical issues and to understand complex concepts.
+
+### Limitations
+- **File Handling:** Currently only supports `index.html` and JPEG images. Other file types or more complex scenarios are not handled.
+- **Response Handling:** Limited to basic error handling and does not cover all HTTP features.
+
+This project served as a valuable learning experience in network programming and C. Future improvements could include broader file type support and more robust error handling.
+
