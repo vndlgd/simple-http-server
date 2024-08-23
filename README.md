@@ -28,7 +28,6 @@ My main challenges were:
 - **Constructing HTTP Responses:** Crafting the correct HTTP response with appropriate headers and content was a significant challenge due to my lack of experience with file handling in C. Ensuring the responses were correctly formatted for browser recognition was a learning experience. 
 
 To overcome these challenges, I utilized several resources:
-- **ChatGPT:** For guidance on specific technical issues and understanding complex concepts.
 - **Beej's Guide to Network Programming:** For foundational knowledge on socket programming and network communication.
 - **Tutorials and Guides:** Including [YouTube videos](https://www.youtube.com/watch?v=mStnzIEprH8) and [TutorialsPoint’s HTTP guide](https://www.tutorialspoint.com/http/index.htm) for understanding HTTP protocol basics.
 
